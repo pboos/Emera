@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.tonchidot.nfc_contact_exchanger;
+
+package ch.pboos.emera;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,9 +23,12 @@ import java.util.List;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
@@ -57,22 +60,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import ch.pboos.emera.lib.AndroidContactExporter;
+import ch.pboos.emera.lib.ApiAccessor;
+import ch.pboos.emera.lib.Contact;
+import ch.pboos.emera.lib.LocationHelper;
+import ch.pboos.emera.lib.MeCardUtils;
+import ch.pboos.emera.lib.PictureUploader;
+import ch.pboos.emera.lib.Preferences;
+import ch.pboos.emera.lib.VCardUtils;
+import ch.pboos.emera.widgets.BusinessCardWidget;
 
-import com.tonchidot.nfc_contact_exchanger.lib.AndroidContactExporter;
-import com.tonchidot.nfc_contact_exchanger.lib.ApiAccessor;
-import com.tonchidot.nfc_contact_exchanger.lib.Contact;
-import com.tonchidot.nfc_contact_exchanger.lib.LocationHelper;
-import com.tonchidot.nfc_contact_exchanger.lib.MeCardUtils;
-import com.tonchidot.nfc_contact_exchanger.lib.PictureUploader;
-import com.tonchidot.nfc_contact_exchanger.lib.Preferences;
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils;
-import com.tonchidot.nfc_contact_exchanger.widgets.BusinessCardWidget;
-
-public class ContacterMainActivity extends BaseAnalyticsActivity {
-    private static final String TAG = ContacterMainActivity.class.getSimpleName();
+public class MainActivity extends BaseAnalyticsActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     protected static final int REQUEST_CONTACT = 0;
     protected static final int REQUEST_QR_VCARD = 1;
@@ -85,6 +88,7 @@ public class ContacterMainActivity extends BaseAnalyticsActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
@@ -179,36 +183,58 @@ public class ContacterMainActivity extends BaseAnalyticsActivity {
         Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_write_tag:
-                intent = new Intent(ContacterMainActivity.this, TagWriteActivity.class);
+                intent = new Intent(MainActivity.this, TagWriteActivity.class);
                 intent.putExtra(TagWriteActivity.EXTRA_VCARD, selectedVcardString);
                 startActivity(intent);
                 return true;
             case R.id.menu_history:
-                intent = new Intent(ContacterMainActivity.this, HistoryActivity.class);
+                intent = new Intent(MainActivity.this, HistoryActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.menu_qrcode_import:
-                // TODO: check if app is even installed, if not, show message
-                // and allow to install
-                intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.setPackage("com.google.zxing.client.android");
-                intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-                startActivityForResult(intent, REQUEST_QR_VCARD);
-                tracker.trackEvent(EVENT_CATEGORY_CONTACTS, EVENT_ACTION_SHARE, EVENT_LABEL_QRCODE,
-                        1);
+                try {
+                    intent = new Intent("com.google.zxing.client.android.SCAN");
+                    intent.setPackage("com.google.zxing.client.android");
+                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+                    startActivityForResult(intent, REQUEST_QR_VCARD);
+                    tracker.trackEvent(EVENT_CATEGORY_CONTACTS, EVENT_ACTION_SHARE,
+                            EVENT_LABEL_QRCODE, 1);
+                } catch (ActivityNotFoundException e) {
+                    showDialogToInstallBarcodeScanner();
+                }
                 return true;
             case R.id.menu_qrcode_export:
-                // TODO: check if app is even installed, if not, show message
-                // and allow to install
-                intent = new Intent("com.google.zxing.client.android.ENCODE");
-                intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
-                intent.putExtra("ENCODE_DATA", MeCardUtils.fromVCard(selectedVcardString));
-                startActivity(intent);
+                try {
+                    intent = new Intent("com.google.zxing.client.android.ENCODE");
+                    intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
+                    intent.putExtra("ENCODE_DATA", MeCardUtils.fromVCard(selectedVcardString));
+                    startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    showDialogToInstallBarcodeScanner();
+                }
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showDialogToInstallBarcodeScanner() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog_barcodescanner).setCancelable(true)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(Uri
+                                .parse("https://market.android.com/details?id=com.google.zxing.client.android"));
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        builder.create().show();
     }
 
     @Override
@@ -361,8 +387,7 @@ public class ContacterMainActivity extends BaseAnalyticsActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Contact entry = (Contact) adapter.getItem(position);
-                Intent intent = new Intent(ContacterMainActivity.this,
-                        ContactReceivedActivity.class);
+                Intent intent = new Intent(MainActivity.this, ContactReceivedActivity.class);
                 intent.putExtra(ContactReceivedActivity.EXTRA_HISTORY_ID, entry.id);
                 startActivity(intent);
             }

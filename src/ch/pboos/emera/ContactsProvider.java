@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.tonchidot.nfc_contact_exchanger;
+
+package ch.pboos.emera;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -31,7 +31,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 public class ContactsProvider extends ContentProvider {
-    private static final String packageName = "com.tonchidot.nfc_contact_exchanger";
+    private static final String packageName = "ch.pboos.emera";
     public static final Uri CONTENT_URI = Uri.parse("content://" + packageName + "/contacts");
 
     private static final String TAG = ContactsProvider.class.getSimpleName();
@@ -94,9 +94,9 @@ public class ContactsProvider extends ContentProvider {
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
             case CONTACTS:
-                return "vnd.android.cursor.dir/vnd.nfc_contact_exchanger.contact";
+                return "vnd.android.cursor.dir/vnd.emera.contact";
             case CONTACT_ID:
-                return "vnd.android.cursor.item/vnd.nfc_contact_exchanger.contact";
+                return "vnd.android.cursor.item/vnd.emera.contact";
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.tonchidot.nfc_contact_exchanger.widgets;
+package ch.pboos.emera.widgets;
 
 import java.util.ArrayList;
 
@@ -31,8 +31,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.tonchidot.nfc_contact_exchanger.R;
+import ch.pboos.emera.R;
 
 /**
  * @author nguyendt

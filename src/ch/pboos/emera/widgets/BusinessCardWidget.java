@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.tonchidot.nfc_contact_exchanger.widgets;
+
+package ch.pboos.emera.widgets;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,12 +44,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.tonchidot.nfc_contact_exchanger.R;
-import com.tonchidot.nfc_contact_exchanger.lib.ImageDownloaderTask;
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils;
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils.NodeHandler;
-import com.tonchidot.nfc_contact_exchanger.widgets.IconContextMenu.IconContextMenuOnClickListener;
+import ch.pboos.emera.R;
+import ch.pboos.emera.lib.ImageDownloaderTask;
+import ch.pboos.emera.lib.VCardUtils;
+import ch.pboos.emera.lib.VCardUtils.NodeHandler;
+import ch.pboos.emera.widgets.IconContextMenu.IconContextMenuOnClickListener;
 
 /**
  * The Class BusinessCardRelativeLayout.

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
  
-package com.tonchidot.nfc_contact_exchanger.tools;
+package ch.pboos.emera.tools;
 
 import java.io.BufferedInputStream;
 import java.io.File;

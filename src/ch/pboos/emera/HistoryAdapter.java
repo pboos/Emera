@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.tonchidot.nfc_contact_exchanger;
+package ch.pboos.emera;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,12 +33,11 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.tonchidot.nfc_contact_exchanger.lib.Contact;
-import com.tonchidot.nfc_contact_exchanger.lib.ImageUtils;
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils;
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils.NodeHandler;
-import com.tonchidot.nfc_contact_exchanger.tools.ImageStorage;
+import ch.pboos.emera.lib.Contact;
+import ch.pboos.emera.lib.ImageUtils;
+import ch.pboos.emera.lib.VCardUtils;
+import ch.pboos.emera.lib.VCardUtils.NodeHandler;
+import ch.pboos.emera.tools.ImageStorage;
 
 public class HistoryAdapter extends BaseAdapter implements Filterable {
 

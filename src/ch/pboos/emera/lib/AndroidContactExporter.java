@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.tonchidot.nfc_contact_exchanger.lib;
+
+package ch.pboos.emera.lib;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,8 +32,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
-
-import com.tonchidot.nfc_contact_exchanger.R;
+import ch.pboos.emera.R;
 
 public class AndroidContactExporter {
     private Context context;

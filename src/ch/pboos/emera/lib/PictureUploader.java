@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.tonchidot.nfc_contact_exchanger.lib;
+
+package ch.pboos.emera.lib;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

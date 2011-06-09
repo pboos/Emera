@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.tonchidot.nfc_contact_exchanger" android:versionCode="1"
-	android:versionName="1.0">
+	android:versionCode="1" android:versionName="1.0" package="ch.pboos.emera">
 	<uses-sdk android:minSdkVersion="8" />
 
 	<uses-feature android:name="android.hardware.nfc"
@@ -18,8 +17,7 @@
 
 	<application android:icon="@drawable/icon" android:theme="@style/Theme"
 		android:label="@string/app_name">
-		<activity android:name=".ContacterMainActivity"
-			android:label="@string/app_name">
+		<activity android:name=".MainActivity" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -40,10 +38,10 @@
 		<activity android:name=".ContactReceivedActivity"
 			android:label="@string/activity_contact" />
 		<activity android:name=".HistoryActivity" android:label="@string/activity_history" />
-		<activity android:name="com.tonchidot.nfc_contact_exchanger.HistoryMapActivity" android:label="@string/activity_history_map" />
+		<activity android:name="HistoryMapActivity" android:label="@string/activity_history_map" />
 
-		<provider android:name="com.tonchidot.nfc_contact_exchanger.ContactsProvider"
-			android:authorities="com.tonchidot.nfc_contact_exchanger" />
+		<provider android:name=".ContactsProvider"
+			android:authorities="ch.pboos.emera" />
 
 		<uses-library android:name="com.google.android.maps" />
 	</application>

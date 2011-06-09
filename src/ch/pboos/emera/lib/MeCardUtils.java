@@ -14,11 +14,11 @@
  * limitations under the License.
  */
  
-package com.tonchidot.nfc_contact_exchanger.lib;
+package ch.pboos.emera.lib;
 
 import java.util.ArrayList;
 
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils.NodeHandler;
+import ch.pboos.emera.lib.VCardUtils.NodeHandler;
 
 import a_vcard.android.provider.Contacts;
 import a_vcard.android.syncml.pim.PropertyNode;

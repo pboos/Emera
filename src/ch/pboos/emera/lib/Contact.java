@@ -14,11 +14,11 @@
  * limitations under the License.
  */
  
-package com.tonchidot.nfc_contact_exchanger.lib;
+package ch.pboos.emera.lib;
 
 import java.util.Date;
 
-import com.tonchidot.nfc_contact_exchanger.ContactsProvider;
+import ch.pboos.emera.ContactsProvider;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;

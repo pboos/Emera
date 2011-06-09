@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.tonchidot.nfc_contact_exchanger;
+
+package ch.pboos.emera;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +32,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
-
-import com.tonchidot.nfc_contact_exchanger.lib.Contact;
-import com.tonchidot.nfc_contact_exchanger.widgets.IconContextMenu;
-import com.tonchidot.nfc_contact_exchanger.widgets.IconContextMenu.IconContextMenuOnClickListener;
+import ch.pboos.emera.lib.Contact;
+import ch.pboos.emera.widgets.IconContextMenu;
+import ch.pboos.emera.widgets.IconContextMenu.IconContextMenuOnClickListener;
 
 public class HistoryActivity extends BaseAnalyticsActivity {
 

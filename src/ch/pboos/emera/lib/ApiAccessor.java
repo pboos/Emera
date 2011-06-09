@@ -14,7 +14,7 @@
  * limitations under the License.
  */
  
-package com.tonchidot.nfc_contact_exchanger.lib;
+package ch.pboos.emera.lib;
 
 import android.os.Build;
 

@@ -11,14 +11,14 @@
 			android:orientation="vertical" android:gravity="center_vertical">
 			<TextView android:id="@+id/text_meet_date"
 				android:textColor="@color/grayLight" android:gravity="right"
-				android:layout_height="wrap_content" android:text="Date/Time"
+				android:layout_height="wrap_content" android:text="(Date/Time)"
 				android:layout_width="match_parent"></TextView>
-			<com.tonchidot.nfc_contact_exchanger.widgets.BusinessCardWidget
+			<ch.pboos.emera.widgets.BusinessCardWidget
 				android:id="@+id/businesscard" android:layout_height="220dp"
 				android:layout_width="match_parent" android:layout_marginTop="10dp" />
 			<TextView android:id="@+id/text_meet_place"
 				android:textColor="@color/grayLight" android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:text="Place Meet"
+				android:layout_width="wrap_content" android:text="@string/meeting_place"
 				android:layout_marginTop="10dp"></TextView>
 			<ImageView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:id="@+id/image_map"></ImageView>

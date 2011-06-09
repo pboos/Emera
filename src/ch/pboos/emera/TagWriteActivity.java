@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.tonchidot.nfc_contact_exchanger;
+package ch.pboos.emera;
 
 import java.io.IOException;
 
@@ -33,9 +33,8 @@ import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.widget.Toast;
-
-import com.tonchidot.nfc_contact_exchanger.lib.Preferences;
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils;
+import ch.pboos.emera.lib.Preferences;
+import ch.pboos.emera.lib.VCardUtils;
 
 public class TagWriteActivity extends BaseAnalyticsActivity {
 

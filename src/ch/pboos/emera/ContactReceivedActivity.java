@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.tonchidot.nfc_contact_exchanger;
+
+package ch.pboos.emera;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -42,11 +42,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.tonchidot.nfc_contact_exchanger.lib.Contact;
-import com.tonchidot.nfc_contact_exchanger.lib.ImageDownloaderTask;
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils;
-import com.tonchidot.nfc_contact_exchanger.widgets.BusinessCardWidget;
+import ch.pboos.emera.lib.Contact;
+import ch.pboos.emera.lib.ImageDownloaderTask;
+import ch.pboos.emera.lib.VCardUtils;
+import ch.pboos.emera.widgets.BusinessCardWidget;
 
 public class ContactReceivedActivity extends BaseAnalyticsActivity {
     private static final String TAG = ContactReceivedActivity.class.getSimpleName();

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.tonchidot.nfc_contact_exchanger.tools;
+package ch.pboos.emera.tools;
 
 import java.io.File;
 
@@ -25,9 +25,8 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-
-import com.tonchidot.nfc_contact_exchanger.lib.Contact;
-import com.tonchidot.nfc_contact_exchanger.lib.VCardUtils;
+import ch.pboos.emera.lib.Contact;
+import ch.pboos.emera.lib.VCardUtils;
 
 /**
  * This class provides easy access to images. Giving the model object it will
@@ -43,7 +42,7 @@ public class ImageStorage {
 
     /** The Constant FOLDER_DOMO. */
     public static final String APP_FOLDER = Environment.getExternalStorageDirectory()
-            + "/nfc_contact_exchanger/";
+            + "/Emera/";
 
     /** The Constant FOLDER_TEMP. */
     public static final String FOLDER_TEMP = APP_FOLDER + ".tmp/";

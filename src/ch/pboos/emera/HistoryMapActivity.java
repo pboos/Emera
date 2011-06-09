@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-package com.tonchidot.nfc_contact_exchanger;
+
+package ch.pboos.emera;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,8 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import ch.pboos.emera.lib.Contact;
+import ch.pboos.emera.lib.LocationHelper;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.maps.GeoPoint;
@@ -33,8 +35,6 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-import com.tonchidot.nfc_contact_exchanger.lib.Contact;
-import com.tonchidot.nfc_contact_exchanger.lib.LocationHelper;
 
 public class HistoryMapActivity extends MapActivity {
     List<Overlay> mapOverlays;
