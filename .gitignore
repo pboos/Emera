@@ -8,4 +8,4 @@ tonchidot.keystore
 /tests/reports
 /proguard
 .DS_Store
-
+keystore
