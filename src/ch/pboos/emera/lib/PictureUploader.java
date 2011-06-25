@@ -28,7 +28,6 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Config;
@@ -51,7 +50,7 @@ public class PictureUploader {
         try {
             json = new JSONObject(result);
             return json.getJSONObject("upload").getJSONObject("links").getString("original");
-        } catch (JSONException e) {
+        } catch (Exception e) {
             return null;
         }
     }

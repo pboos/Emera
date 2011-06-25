@@ -54,6 +54,7 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -482,7 +483,9 @@ public class MainActivity extends BaseAnalyticsActivity {
 
             @Override
             protected void onPostExecute(String url) {
-                preferences.savePhotoOnlineUrl(url);
+                if (!TextUtils.isEmpty(url)) {
+                    preferences.savePhotoOnlineUrl(url);
+                }
                 try {
                     setUpForgroundNdefPush();
                 } catch (Exception e) {
