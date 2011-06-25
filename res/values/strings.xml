@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Emera</string>
-    <string name="ga_api_key">YOUR GOOGLE ANALYTICS KEY</string>
+    <string name="ga_api_key">UA-23612615-1</string>
     <string name="no_contact_selected">No contact selected</string>
     <string name="write_tag_info">Please hold the NFC Tag to the back of the phone to write the contact.</string>
     <string name="menu_delete">Delete</string>

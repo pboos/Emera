@@ -39,7 +39,7 @@ public class PictureUploader {
 
     public String uploadPicture(byte[] data) {
         // TODO replace with own picture server
-        String imgbur_key = "### YOUR IMGUR KEY ###"; // imgur.com
+        String imgbur_key = "5bcb1b22c40d6631e328598280903c6d"; // imgur.com
 
         final List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
         nameValuePairs.add(new BasicNameValuePair("key", imgbur_key));

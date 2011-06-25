@@ -39,7 +39,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -129,7 +129,7 @@ public class BusinessCardWidget extends RelativeLayout implements OnClickListene
     }
 
     public void setOnEditClickListener(OnClickListener listener) {
-        ImageButton contactChooserButton = (ImageButton) findViewById(R.id.button_contact);
+        Button contactChooserButton = (Button) findViewById(R.id.button_contact);
         contactChooserButton.setOnClickListener(listener);
     }
 
