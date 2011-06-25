@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package ch.pboos.emera.lib;
 
 import java.util.List;
@@ -21,27 +21,82 @@ import java.util.List;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
-public class LocationHelper {
+public class LocationHelper implements LocationListener {
+    private static final String TAG = LocationHelper.class.getSimpleName();
+
     private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private Context context;
+    private static Location mDetectedLocation;
+    private LocationManager mLocationManager;
+    private Handler mHandler;
+    private Runnable mStopLocationDetectRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            stopLocationDetect();
+        }
+    };
 
     public LocationHelper(Context context) {
-        this.context = context;
+        mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        mHandler = new Handler();
     }
 
     public Location getLastKnownLocation() {
-        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = lm.getProviders(new Criteria(), false);
-        Location currentBestLocation = null;
-        for (String provider : providers) {
-            Location location = lm.getLastKnownLocation(provider);
+        List<String> matchingProviders = mLocationManager.getAllProviders();
+        Location currentBestLocation = mDetectedLocation;
+        for (String provider : matchingProviders) {
+            Location location = mLocationManager.getLastKnownLocation(provider);
             if (location != null && isBetterLocation(location, currentBestLocation)) {
                 currentBestLocation = location;
             }
         }
         return currentBestLocation;
+    }
+
+    public void tryLocationDetect() {
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        String provider = mLocationManager.getBestProvider(criteria, true);
+        mLocationManager.requestLocationUpdates(provider, 0, 0, this);
+        mHandler.postDelayed(mStopLocationDetectRunnable, 60 * 1000);
+
+        Criteria criteriaFast = new Criteria();
+        criteriaFast.setAccuracy(Criteria.ACCURACY_COARSE);
+        criteriaFast.setPowerRequirement(Criteria.POWER_LOW);
+        mLocationManager.requestSingleUpdate(criteriaFast, this, Looper.myLooper());
+    }
+
+    public void stopLocationDetect() {
+        mLocationManager.removeUpdates(this);
+        mHandler.removeCallbacks(mStopLocationDetectRunnable);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (isBetterLocation(location, mDetectedLocation)) {
+            Log.i(TAG, "New location: " + location);
+            mDetectedLocation = location;
+        }
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
     /**

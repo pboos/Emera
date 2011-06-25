@@ -81,10 +81,12 @@ public class MainActivity extends BaseAnalyticsActivity {
     protected static final int REQUEST_CONTACT = 0;
     protected static final int REQUEST_QR_VCARD = 1;
 
-    private Preferences preferences;
-    private String selectedVcardString;
+    private LocationHelper mLocationHelper;
 
-    private BusinessCardWidget businessCard;
+    private Preferences mPreferences;
+    private String mSelectedVcardString;
+
+    private BusinessCardWidget mBusinessCard;
 
     /** Called when the activity is first created. */
     @Override
@@ -93,10 +95,12 @@ public class MainActivity extends BaseAnalyticsActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
-        preferences = new Preferences(this);
+        mPreferences = new Preferences(this);
+        mLocationHelper = new LocationHelper(getApplicationContext());
+        mLocationHelper.tryLocationDetect();
 
-        businessCard = (BusinessCardWidget) findViewById(R.id.businesscard);
-        businessCard.setOnEditClickListener(new OnClickListener() {
+        mBusinessCard = (BusinessCardWidget) findViewById(R.id.businesscard);
+        mBusinessCard.setOnEditClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -105,9 +109,9 @@ public class MainActivity extends BaseAnalyticsActivity {
             }
         });
 
-        selectedVcardString = getOwnVCard();
-        if (selectedVcardString != null) {
-            showOwnContact(selectedVcardString);
+        mSelectedVcardString = getOwnVCard();
+        if (mSelectedVcardString != null) {
+            showOwnContact(mSelectedVcardString);
         }
         setUpHistory();
     }
@@ -115,7 +119,7 @@ public class MainActivity extends BaseAnalyticsActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (selectedVcardString != null) {
+        if (mSelectedVcardString != null) {
             setUpForgroundNdefPush();
         }
         enableForegroundNfcDispatch();
@@ -148,6 +152,12 @@ public class MainActivity extends BaseAnalyticsActivity {
             }
         }
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mLocationHelper.stopLocationDetect();
+        super.onDestroy();
     }
 
     @Override
@@ -185,7 +195,7 @@ public class MainActivity extends BaseAnalyticsActivity {
         switch (item.getItemId()) {
             case R.id.menu_write_tag:
                 intent = new Intent(MainActivity.this, TagWriteActivity.class);
-                intent.putExtra(TagWriteActivity.EXTRA_VCARD, selectedVcardString);
+                intent.putExtra(TagWriteActivity.EXTRA_VCARD, mSelectedVcardString);
                 startActivity(intent);
                 return true;
             case R.id.menu_history:
@@ -208,7 +218,7 @@ public class MainActivity extends BaseAnalyticsActivity {
                 try {
                     intent = new Intent("com.google.zxing.client.android.ENCODE");
                     intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
-                    intent.putExtra("ENCODE_DATA", MeCardUtils.fromVCard(selectedVcardString));
+                    intent.putExtra("ENCODE_DATA", MeCardUtils.fromVCard(mSelectedVcardString));
                     startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     showDialogToInstallBarcodeScanner();
@@ -245,7 +255,7 @@ public class MainActivity extends BaseAnalyticsActivity {
                 if (resultCode == RESULT_OK) {
                     tracker.trackEvent(EVENT_CATEGORY_CONTACTS, EVENT_ACTION_CHANGE_OWN, "", 1);
                     setOwnContact(data.getData());
-                    showOwnContact(selectedVcardString);
+                    showOwnContact(mSelectedVcardString);
                 }
                 break;
             case REQUEST_QR_VCARD:
@@ -421,14 +431,14 @@ public class MainActivity extends BaseAnalyticsActivity {
     }
 
     private String getOwnVCard() {
-        String vcard = preferences.getOwnVCard();
+        String vcard = mPreferences.getOwnVCard();
         if (vcard != null) {
             return vcard;
         } else {
             Uri contact = findOwnContactThroughContactManager();
             if (contact != null) {
                 setOwnContact(contact);
-                return selectedVcardString;
+                return mSelectedVcardString;
             }
         }
         return null;
@@ -460,10 +470,10 @@ public class MainActivity extends BaseAnalyticsActivity {
 
     private void setOwnContact(Uri contactUri) {
         AndroidContactExporter exporter = new AndroidContactExporter(getApplicationContext());
-        selectedVcardString = exporter.getVCardStringFromUri(contactUri);
+        mSelectedVcardString = exporter.getVCardStringFromUri(contactUri);
 
-        preferences.saveOwnVCard(selectedVcardString);
-        preferences.saveOwnVCardContactLink(contactUri);
+        mPreferences.saveOwnVCard(mSelectedVcardString);
+        mPreferences.saveOwnVCardContactLink(contactUri);
         handlePictureUpload();
     }
 
@@ -472,7 +482,7 @@ public class MainActivity extends BaseAnalyticsActivity {
 
             @Override
             protected String doInBackground(Void... params) {
-                byte[] pictureData = VCardUtils.getPictureData(selectedVcardString);
+                byte[] pictureData = VCardUtils.getPictureData(mSelectedVcardString);
                 String url = null;
                 if (pictureData != null) {
                     PictureUploader uploader = new PictureUploader();
@@ -484,7 +494,7 @@ public class MainActivity extends BaseAnalyticsActivity {
             @Override
             protected void onPostExecute(String url) {
                 if (!TextUtils.isEmpty(url)) {
-                    preferences.savePhotoOnlineUrl(url);
+                    mPreferences.savePhotoOnlineUrl(url);
                 }
                 try {
                     setUpForgroundNdefPush();
@@ -496,27 +506,26 @@ public class MainActivity extends BaseAnalyticsActivity {
     }
 
     private void showOwnContact(String vcard) {
-        businessCard.setVCard(vcard);
+        mBusinessCard.setVCard(vcard);
         Drawable vcardImg = VCardUtils.getDrawable(vcard);
         if (vcardImg != null) {
-            businessCard.setContactImage(vcardImg);
+            mBusinessCard.setContactImage(vcardImg);
         } else {
-            businessCard.setContactImage(getResources().getDrawable(R.drawable.vcard_default));
+            mBusinessCard.setContactImage(getResources().getDrawable(R.drawable.vcard_default));
         }
     }
 
     private NdefMessage createNdefWithPhotoUrlForSelectedContact() {
         return VCardUtils.createNdefVCard(VCardUtils.getVCardWithPhotoUrl(this,
-                selectedVcardString, preferences.getPhotoOnlineUrl()));
+                mSelectedVcardString, mPreferences.getPhotoOnlineUrl()));
     }
 
     protected void saveToHistory(String vcard) {
         Contact entry = new Contact();
         entry.name = VCardUtils.getName(vcard);
         entry.timestamp = Calendar.getInstance().getTimeInMillis();
-        // TODO: do latitude and longitude!
-        Location location = new LocationHelper(getApplicationContext()).getLastKnownLocation();
-        if (location != null) {
+        Location location = mLocationHelper.getLastKnownLocation();
+        if (mLocationHelper != null) {
             entry.latitude = location.getLatitude();
             entry.longitude = location.getLongitude();
         }
