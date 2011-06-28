@@ -66,12 +66,15 @@ public class LocationHelper implements LocationListener {
         criteria.setAltitudeRequired(false);
         String provider = mLocationManager.getBestProvider(criteria, true);
         mLocationManager.requestLocationUpdates(provider, 0, 0, this);
-        mHandler.postDelayed(mStopLocationDetectRunnable, 60 * 1000);
 
         Criteria criteriaFast = new Criteria();
         criteriaFast.setAccuracy(Criteria.ACCURACY_COARSE);
         criteriaFast.setPowerRequirement(Criteria.POWER_LOW);
-        mLocationManager.requestSingleUpdate(criteriaFast, this, Looper.myLooper());
+        mLocationManager.requestLocationUpdates(0, 0, criteriaFast, this, Looper.myLooper());
+        // mLocationManager.requestSingleUpdate(criteriaFast, this,
+        // Looper.myLooper());
+
+        mHandler.postDelayed(mStopLocationDetectRunnable, 60 * 1000);
     }
 
     public void stopLocationDetect() {
